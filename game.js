@@ -2,7 +2,7 @@ function game(level) { // u zavisnosti od kliknutog div-a, dobija se vrednost ev
     $("#page").empty();
     var sol1 = [],
         sol2 = [],
-        sol3 = [];
+        sol3 = []; // moguce kombinacije brojeva za svaki nivo 
     if (level == 3) {
         sol1 = [2, 6, 3, 1, 5, 8, 7, 4];
         sol2 = [6, 1, 3, 2, 8, 7, 5, 4];
@@ -18,25 +18,25 @@ function game(level) { // u zavisnosti od kliknutog div-a, dobija se vrednost ev
     }
     var solpicker = [];
     solpicker = [sol1, sol2, sol3];
-    var randomsol = solpicker[Math.floor(Math.random() * solpicker.length)];
+    var randomsol = solpicker[Math.floor(Math.random() * solpicker.length)]; //biranje nasumicne kombinacije
 
-    var width = 0;
-    var height = 0;
-    var piecew = 0;
-    var pieceh = 0;
-    var col = 0;
-    var row = 0;
-    var x = 0;
-    var y = 0;
-    var i = 0;
-    var j = 0;
-    var lastelem = level - 1;
-    var numberOf = level * level - 1;
+    var width = 0;  //sirina igre
+    var height = 0; //visina igre
+    var piecew = 0; //sirina jednog polja
+    var pieceh = 0; //visina jednog polja
+    var col = 0; //kolona
+    var row = 0; //red
+    var x = 0;  //promenljiva za for petlju
+    var y = 0;  //promenljiva za for petlju
+    var i = 0;  //promenljiva za for petlju
+    var j = 0;  //promenljiva za for petlju
+    var lastelem = level - 1; //posljednji element
+    var numberOf = level * level - 1;  //broj polja sa brojem 
     var cont = $("<div></div>");
-    var matrix = [];
-    var idealmatrix = [];
+    var matrix = [];  //neslozena matrica
+    var idealmatrix = [];  //slozena matrica
 
-    function container() {
+    function container() {        //funkcija za pravljenje prostora za polja
         width = 420;
         height = width;
         $("#page").append(cont);
@@ -46,13 +46,13 @@ function game(level) { // u zavisnosti od kliknutog div-a, dobija se vrednost ev
     }
     container();
 
-    function piecemaking() {
+    function piecemaking() {      //funkcija za popunjavanje i postavljanje polja
         piecew = width / level;
         pieceh = height / level;
-        for (j = 0; j < level; j++) {
+        for (j = 0; j < level; j++) {   //definisanje niza nizova (    matrix (niz1[], niz2[], niz[3].. . niz(level-1))     )
             matrix.push([]);
         }
-        for (i = 0; i < numberOf; i++) {
+        for (i = 0; i < numberOf; i++) {        //dodavanje vrednost u niz1 niz2 i niz3 redom 
             var piece = $("<div>" + randomsol[i] + "</div>");
             cont.append(piece);
             piece.addClass("piece");
@@ -62,21 +62,21 @@ function game(level) { // u zavisnosti od kliknutog div-a, dobija se vrednost ev
             $(".piece").css("font-size", Math.floor(pieceh / 2) + "px");
             col = i % level;
             row = Math.floor(i / level);
-            console.log(col + " " + row);
             matrix[row].push(randomsol[i]);
-            position(piece, col, row, true);
+            position(piece, col, row, true);   
         }
         matrix[lastelem].push(0);
     }
     piecemaking();
-    console.log(matrix);
-    $(document).on('click', '.piece', function movingclick(object) {
+
+  
+    $(document).on('click', '.piece', function movingclick(object) {  //funkcija koja uzima vrednost unutar kliknutog polja i po njoj nalazi poziciju koju prolsedjuje u funkciju za pomeranje
 
         var piece = $(object.currentTarget);
-        var value = parseInt(piece.text());
+        var value = parseInt(piece.text());   // uzima vrednost kliknutog polja (object)
         outerloop:
-            for (y = 0; y < level; y++) {
-                for (x = 0; x < level; x++) {
+            for (y = 0; y < level; y--) {
+                for (x = 0; x < level; x--) {
                     if (matrix[y][x] == value) {
                         console.log(matrix[y][x]);
                         break outerloop;
@@ -108,9 +108,9 @@ function game(level) { // u zavisnosti od kliknutog div-a, dobija se vrednost ev
             }
     });
 
-    function position(piece, col, row, animation) {
-        var l = col * piecew;
-        var t = row * pieceh;
+    function position(piece, col, row, animation) {    //funkcija koja pozicionira polja u odnosu na margine
+        var l = col * piecew;  // od leve margine
+        var t = row * pieceh;   //od gornje margine
         if (animation == false) {
             piece.css("top", t);
             piece.css("left", l);
@@ -122,10 +122,10 @@ function game(level) { // u zavisnosti od kliknutog div-a, dobija se vrednost ev
         }
     }
 
-    function moving(piece, col, row) {
-        var xmove = 0;
+    function moving(piece, col, row) {        //funkcija koja pomera polja u zavisnosti od toga gde je prazno u odnosu na kliknuto polje
+        var xmove = 0;          //x i y pomeraji
         var ymove = 0;
-        if (col > 0 && matrix[row][col - 1] == 0) {
+        if (col > 0 && matrix[row][col - 1] == 0) {     
             xmove = -1;
         } else if (col < level - 1 && matrix[row][col + 1] == 0) {
             xmove = 1;
@@ -144,7 +144,7 @@ function game(level) { // u zavisnosti od kliknutog div-a, dobija se vrednost ev
     }
 
 
-    function makingidealmatrix() {
+    function makingidealmatrix() {    //funkcija koja definise dobro poredjanu matricu radi uporedjivanja 
         for (var j = 0; j < level; j++) {
             idealmatrix.push([]);
         }
