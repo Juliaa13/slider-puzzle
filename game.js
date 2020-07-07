@@ -75,8 +75,8 @@ function game(level) { // u zavisnosti od kliknutog div-a, dobija se vrednost ev
         var piece = $(object.currentTarget);
         var value = parseInt(piece.text());   // uzima vrednost kliknutog polja (object)
         outerloop:
-            for (y = 0; y < level; y--) {
-                for (x = 0; x < level; x--) {
+            for (y = 0; y < level; y++) {
+                for (x = 0; x < level; x++) {
                     if (matrix[y][x] == value) {
                         console.log(matrix[y][x]);
                         break outerloop;
